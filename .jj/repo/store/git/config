@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+	logallrefupdates = false
+	symlinks = true
+	ignorecase = false
+	precomposeunicode = true
+[remote "origin"]
+	url = https://github.com/hamlim/parcel-rsc-ssr.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
