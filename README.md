@@ -17,3 +17,12 @@ This project was created using `bun init` in bun v1.1.36. [Bun](https://bun.sh) 
 
 ---
 
+This is a partial fork of the server-driven demo here: https://github.com/parcel-bundler/rsc-examples
+
+## Local Dev:
+
+- In two terminals:
+    - `bun run dev`
+    - `bun run start`
+
+Not sure why you need two processes, that's a bit unfortunate at the moment...
