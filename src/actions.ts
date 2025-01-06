@@ -1,6 +1,6 @@
 "use server";
 
-import fs from "fs/promises";
+import fs from "node:fs/promises";
 
 export interface Todo {
   id: number;

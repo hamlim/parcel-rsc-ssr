@@ -1,4 +1,5 @@
 import { Readable } from "node:stream";
+import type { ReadableStream as NodeReadableStream } from "node:stream/web";
 // Server dependencies.
 import express, {
   type Request as ExpressRequest,
@@ -12,7 +13,6 @@ import {
   renderToReadableStream,
 } from "react-server-dom-parcel/server.edge";
 import { injectRSCPayload } from "rsc-html-stream/server";
-import type { ReadableStream as NodeReadableStream } from "stream/web";
 
 import ReactClient, { ReactElement } from "react" with { env: "react-client" };
 import { renderToReadableStream as renderHTMLToReadableStream } from "react-dom/server" with {
