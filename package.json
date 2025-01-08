@@ -8,7 +8,8 @@
       "outputFormat": "commonjs",
       "includeNodeModules": {
         "hono": false,
-        "express": false
+        "express": false,
+        "@hono/node-server": false
       }
     }
   },
@@ -21,6 +22,7 @@
     "@parcel/runtime-rsc": "dev",
     "express": "^4.21.2",
     "hono": "4.6.14",
+    "@hono/node-server": "1.13.7",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-server-dom-parcel": "0.0.1",
