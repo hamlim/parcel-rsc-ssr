@@ -3,6 +3,7 @@ import { serveStatic } from "@hono/node-server/serve-static";
 
 // Server dependencies.
 import { type Context, Hono } from "hono";
+import { stream } from "hono/streaming";
 import {
   decodeAction,
   decodeReply,
@@ -35,21 +36,59 @@ honoApp.use((c, next) => {
 
 honoApp.use("/*", serveStatic({ root: "./dist" }));
 
+type API = {
+  context: Context;
+  stream: Parameters<Parameters<typeof stream>[1]>[0];
+};
+
 honoApp.get("/", async (c) => {
-  return await renderHono(c, <Todos />);
+  if (c.req.header("accept")?.includes("text/x-component")) {
+    c.header("Content-Type", "text/x-component");
+  } else {
+    c.header("Content-Type", "text/html");
+  }
+  return stream(c, async (stream) => {
+    let api: API = { context: c, stream };
+    await renderHono(api, <Todos />);
+  });
 });
 
 honoApp.post("/", async (c) => {
-  return await handleHonoAction(c, <Todos />);
+  if (c.req.header("accept")?.includes("text/x-component")) {
+    c.header("Content-Type", "text/x-component");
+  } else {
+    c.header("Content-Type", "text/html");
+  }
+  return stream(c, async (stream) => {
+    let api: API = { context: c, stream };
+    await handleHonoAction(api, <Todos />);
+  });
 });
 
 honoApp.get("/todos/:id", async (c) => {
-  return await renderHono(c, <Todos id={Number(c.req.param("id"))} />);
+  if (c.req.header("accept")?.includes("text/x-component")) {
+    c.header("Content-Type", "text/x-component");
+  } else {
+    c.header("Content-Type", "text/html");
+  }
+  return stream(c, async (stream) => {
+    let api: API = { context: c, stream };
+    await renderHono(api, <Todos id={Number(c.req.param("id"))} />);
+  });
 });
 
 honoApp.post("/todos/:id", async (c) => {
-  return await handleHonoAction(c, <Todos id={Number(c.req.param("id"))} />);
+  if (c.req.header("accept")?.includes("text/x-component")) {
+    c.header("Content-Type", "text/x-component");
+  } else {
+    c.header("Content-Type", "text/html");
+  }
+  return stream(c, async (stream) => {
+    let api: API = { context: c, stream };
+    await handleHonoAction(api, <Todos id={Number(c.req.param("id"))} />);
+  });
 });
+
 function acceptsHTML(acceptHeader: string | undefined) {
   return (
     acceptHeader === "text/html" ||
@@ -59,16 +98,17 @@ function acceptsHTML(acceptHeader: string | undefined) {
 }
 
 async function renderHono(
-  c: Context,
+  api: API,
   component: ReactElement,
   actionResult?: any,
-) {
+): Promise<void> {
+  let { context, stream: streamingAPI } = api;
   let root: any = component;
   if (actionResult) {
     root = { result: actionResult, root };
   }
   let stream = renderToReadableStream(root);
-  if (acceptsHTML(c.req.header("accept"))) {
+  if (acceptsHTML(context.req.header("accept"))) {
     let [s1, s2] = stream.tee();
     let data = createFromReadableStream<ReactElement>(s1);
     function Content() {
@@ -78,31 +118,28 @@ async function renderHono(
     let htmlStream = await renderHTMLToReadableStream(<Content />);
     let responseStream = htmlStream.pipeThrough(injectRSCPayload(s2));
 
-    // Couldn't find a way to stream a response within hono _and_ set the response header
-    return new Response(responseStream, {
-      headers: {
-        "Content-Type": "text/html",
-      },
-    });
+    // context.header("Content-Type", "text/html");
+    await streamingAPI.pipe(responseStream);
+  } else {
+    // context.header("Content-Type", "text/x-component");
+    await streamingAPI.pipe(stream);
   }
-
-  // Couldn't find a way to stream a response within hono _and_ set the response header
-  return new Response(stream, {
-    headers: {
-      "Content-Type": "text/x-component",
-    },
-  });
 }
 
 // Handle server actions.
-async function handleHonoAction(c: Context, component: ReactElement) {
-  let id = c.req.header("rsc-action-id");
+async function handleHonoAction(
+  api: API,
+  component: ReactElement,
+): Promise<void> {
+  let id = api.context.req.header("rsc-action-id");
 
   if (id) {
     let action = await loadServerAction(id);
-    let body = c.req.header("content-type")?.includes("multipart/form-data")
-      ? await c.req.formData()
-      : await c.req.text();
+    let body = api.context.req
+      .header("content-type")
+      ?.includes("multipart/form-data")
+      ? await api.context.req.formData()
+      : await api.context.req.text();
     let args = await decodeReply<any[]>(body);
     let result = action.apply(null, args);
     try {
@@ -111,17 +148,18 @@ async function handleHonoAction(c: Context, component: ReactElement) {
       // We handle the error on the client
     }
 
-    return await renderHono(c, component, result);
+    await renderHono(api, component, result);
+  } else {
+    // Form submitted by browser (progressive enhancement).
+    let formData = await api.context.req.formData();
+    let action = await decodeAction(formData);
+    try {
+      await action();
+    } catch (err) {
+      // TODO render error page?
+    }
+    await renderHono(api, component);
   }
-  // Form submitted by browser (progressive enhancement).
-  let formData = await c.req.formData();
-  let action = await decodeAction(formData);
-  try {
-    await action();
-  } catch (err) {
-    // TODO render error page?
-  }
-  return await renderHono(c, component);
 }
 
 console.log("Starting server");
