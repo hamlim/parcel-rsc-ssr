@@ -12,7 +12,10 @@ export function TodoItem({
   );
 
   return (
-    <li data-selected={isSelected || undefined}>
+    <li
+      data-selected={isSelected || undefined}
+      className="flex gap-8 p-8 rounded-md accent-color-[light-dark(black, white)] &[data-selected]:bg-[light-dark(#222, #ddd)] &[data-selected]:text-[light-dark(#ddd, #222)]"
+    >
       <input
         type="checkbox"
         checked={isOptimisticComplete}
@@ -26,10 +29,13 @@ export function TodoItem({
       <a
         href={`/todos/${todo.id}`}
         aria-current={isSelected ? "page" : undefined}
+        className="text-inherit text-decoration-none w-full"
       >
         {todo.title}
       </a>
-      <button onClick={() => deleteTodo(todo.id)}>x</button>
+      <button type="submit" onClick={() => deleteTodo(todo.id)}>
+        x
+      </button>
     </li>
   );
 }

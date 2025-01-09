@@ -1,7 +1,8 @@
 "use server-entry";
 
 import "./client";
-import "./Todos.css";
+// import "./Todos.css";
+import "./app.css";
 import { Resources } from "@parcel/runtime-rsc";
 import { Dialog } from "./Dialog";
 import { TodoCreate } from "./TodoCreate";
@@ -15,16 +16,16 @@ export async function Todos({ id }: { id?: number }) {
         <title>Hello World!</title>
         <Resources />
       </head>
-      <body>
-        <header>
+      <body className="font-family-system-ui">
+        <header className="flex items-center justify-between max-w-250px p-8 pr-40 box-border">
           <h1>Hello World!</h1>
           <Dialog trigger="+">
             <h2>Add todo</h2>
             <TodoCreate />
           </Dialog>
         </header>
-        <main>
-          <div className="todo-column">
+        <main className="flex gap-32">
+          <div className="todo-column w-250px">
             <TodoList id={id} />
           </div>
           {id != null ? <TodoDetail key={id} id={id} /> : <p>Select a todo</p>}
