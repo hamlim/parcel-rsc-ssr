@@ -43,7 +43,6 @@ writeFileSync(
   JSON.stringify({
     dependencies: {
       ...packageJson.dependencies,
-      ...packageJson.devDependencies,
     },
   }),
 );
