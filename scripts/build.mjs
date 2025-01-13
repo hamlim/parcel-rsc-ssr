@@ -7,6 +7,13 @@ execSync("bun parcel build");
 // make the necessary directories
 execSync("mkdir -p .vercel/output/static");
 
+writeFileSync(
+  ".vercel/output/config.json",
+  JSON.stringify({
+    version: 3,
+  }),
+);
+
 // move built files from dist to the static folder
 execSync("cp -r dist/* .vercel/output/static/");
 
