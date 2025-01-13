@@ -180,3 +180,5 @@ dist
 .parcel-cache
 dist
 todos.json
+
+.vercel/
