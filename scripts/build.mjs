@@ -59,6 +59,8 @@ writeFileSync(
     runtime: "nodejs22.x",
     handler: "server.mjs",
     maxDuration: 10,
+    // no idea what this does...
+    shouldAddHelpers: true,
     launcherType: "Nodejs",
     supportsResponseStreaming: true,
   }),
