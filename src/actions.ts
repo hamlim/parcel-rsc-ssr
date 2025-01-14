@@ -1,6 +1,8 @@
 "use server";
 
-import fs from "node:fs/promises";
+// import fs from "node:fs/promises";
+
+let todos: Todo[] = [];
 
 export interface Todo {
   id: number;
@@ -11,13 +13,14 @@ export interface Todo {
 }
 
 export async function getTodos(): Promise<Todo[]> {
-  try {
-    let contents = await fs.readFile("todos.json", "utf8");
-    return JSON.parse(contents);
-  } catch {
-    await fs.writeFile("todos.json", "[]");
-    return [];
-  }
+  return todos;
+  // try {
+  //   let contents = await fs.readFile("todos.json", "utf8");
+  //   return JSON.parse(contents);
+  // } catch {
+  //   await fs.writeFile("todos.json", "[]");
+  //   return [];
+  // }
 }
 
 export async function getTodo(id: number): Promise<Todo | undefined> {
@@ -26,50 +29,55 @@ export async function getTodo(id: number): Promise<Todo | undefined> {
 }
 
 export async function createTodo(formData: FormData) {
-  let todos = await getTodos();
+  let newTodos = await getTodos();
   let title = formData.get("title");
   let description = formData.get("description");
   let dueDate = formData.get("dueDate");
-  let id = todos.length > 0 ? Math.max(...todos.map((todo) => todo.id)) + 1 : 0;
-  todos.push({
+  let id =
+    newTodos.length > 0 ? Math.max(...newTodos.map((todo) => todo.id)) + 1 : 0;
+  newTodos.push({
     id,
     title: typeof title === "string" ? title : "",
     description: typeof description === "string" ? description : "",
     dueDate: typeof dueDate === "string" ? dueDate : new Date().toISOString(),
     isComplete: false,
   });
-  await fs.writeFile("todos.json", JSON.stringify(todos));
+  // await fs.writeFile("todos.json", JSON.stringify(todos));
+  todos = newTodos;
 }
 
 export async function updateTodo(id: number, formData: FormData) {
-  let todos = await getTodos();
+  let newTodos = await getTodos();
   let title = formData.get("title");
   let description = formData.get("description");
   let dueDate = formData.get("dueDate");
-  let todo = todos.find((todo) => todo.id === id);
+  let todo = newTodos.find((todo) => todo.id === id);
   if (todo) {
     todo.title = typeof title === "string" ? title : "";
     todo.description = typeof description === "string" ? description : "";
     todo.dueDate =
       typeof dueDate === "string" ? dueDate : new Date().toISOString();
-    await fs.writeFile("todos.json", JSON.stringify(todos));
+    // await fs.writeFile("todos.json", JSON.stringify(todos));
+    todos = newTodos;
   }
 }
 
 export async function setTodoComplete(id: number, isComplete: boolean) {
-  let todos = await getTodos();
-  let todo = todos.find((todo) => todo.id === id);
+  let newTodos = await getTodos();
+  let todo = newTodos.find((todo) => todo.id === id);
   if (todo) {
     todo.isComplete = isComplete;
-    await fs.writeFile("todos.json", JSON.stringify(todos));
+    // await fs.writeFile("todos.json", JSON.stringify(todos));
+    todos = newTodos;
   }
 }
 
 export async function deleteTodo(id: number) {
-  let todos = await getTodos();
-  let index = todos.findIndex((todo) => todo.id === id);
+  let newTodos = await getTodos();
+  let index = newTodos.findIndex((todo) => todo.id === id);
   if (index >= 0) {
-    todos.splice(index, 1);
-    await fs.writeFile("todos.json", JSON.stringify(todos));
+    newTodos.splice(index, 1);
+    // await fs.writeFile("todos.json", JSON.stringify(todos));
+    todos = newTodos;
   }
 }

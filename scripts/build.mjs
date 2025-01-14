@@ -54,20 +54,20 @@ writeFileSync(
 );
 
 // get dependencies from package.json
-let packageJson = JSON.parse(readFileSync("package.json", "utf8"));
+// let packageJson = JSON.parse(readFileSync("package.json", "utf8"));
 
 // write the dependencies to a nested package.json file
-writeFileSync(
-  ".vercel/output/functions/serverless.func/package.json",
-  JSON.stringify({
-    dependencies: {
-      ...packageJson.dependencies,
-    },
-  }),
-);
+// writeFileSync(
+//   ".vercel/output/functions/serverless.func/package.json",
+//   JSON.stringify({
+//     dependencies: {
+//       // Hmmm - there has to be a better way for
+//     },
+//   }),
+// );
 
 // generate node_modules
 
-execSync("bun i", {
-  cwd: ".vercel/output/functions/serverless.func",
-});
+// execSync("bun i", {
+//   cwd: ".vercel/output/functions/serverless.func",
+// });
