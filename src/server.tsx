@@ -162,5 +162,7 @@ async function handleHonoAction(
 }
 
 let handler = honoApp.fetch;
+// @ts-ignore
+globalThis.handler = handler;
 
 export default handler;

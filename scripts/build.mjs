@@ -10,8 +10,16 @@ if (existsSync(".vercel/output")) {
 if (existsSync("dist")) {
   execSync("rm -rf dist");
 }
+if (existsSync(".parcel-cache")) {
+  execSync("rm -rf .parcel-cache");
+}
 
 execSync("bun parcel build");
+
+writeFileSync(
+  "dist/server-entry.mjs",
+  "import './server.js';\nexport default globalThis.handler;",
+);
 
 // make the necessary directories
 execSync("mkdir -p .vercel/output/static");
@@ -36,7 +44,7 @@ if (legacy) {
   execSync("cp -r dist/* .vercel/output/functions/index.func/");
 } else {
   await build({
-    input: "dist/server.js",
+    input: "dist/server-entry.mjs",
     platform: "node",
 
     output: {
