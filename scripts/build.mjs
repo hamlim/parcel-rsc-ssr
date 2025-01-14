@@ -24,29 +24,29 @@ writeFileSync(
 execSync("cp -r dist/* .vercel/output/static/");
 
 // make the necessary serverless directories
-execSync("mkdir -p .vercel/output/functions/serverless.func");
+execSync("mkdir -p .vercel/output/functions/index.func");
 
 let legacy = false;
 
 // move all files from dist/ to the serverless.func directory
 if (legacy) {
-  execSync("cp -r dist/* .vercel/output/functions/serverless.func/");
+  execSync("cp -r dist/* .vercel/output/functions/index.func/");
 } else {
   await build({
     input: "dist/server.js",
     platform: "node",
 
     output: {
-      file: ".vercel/output/functions/serverless.func/server.js",
+      file: ".vercel/output/functions/index.func/server.mjs",
     },
   });
 }
 
 writeFileSync(
-  ".vercel/output/functions/serverless.func/.vc-config.json",
+  ".vercel/output/functions/index.func/.vc-config.json",
   JSON.stringify({
     runtime: "nodejs22.x",
-    handler: "server.js",
+    handler: "server.mjs",
     maxDuration: 10,
     launcherType: "Nodejs",
     supportsResponseStreaming: true,
