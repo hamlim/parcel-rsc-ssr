@@ -2,13 +2,16 @@ import { execSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { build } from "rolldown";
 
-execSync("bun parcel build");
-
 // After it's built - now we move files to the correct locations
 
 if (existsSync(".vercel/output")) {
   execSync("rm -rf .vercel/output");
 }
+if (existsSync("dist")) {
+  execSync("rm -rf dist");
+}
+
+execSync("bun parcel build");
 
 // make the necessary directories
 execSync("mkdir -p .vercel/output/static");

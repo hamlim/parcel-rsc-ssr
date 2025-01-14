@@ -161,5 +161,6 @@ async function handleHonoAction(
   }
 }
 
+let handler = honoApp.fetch;
 
-export default honoApp.fetch
+export default handler;
