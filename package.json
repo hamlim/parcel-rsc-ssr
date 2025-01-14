@@ -16,6 +16,7 @@
   "scripts": {
     "watch": "parcel watch",
     "build": "bun scripts/build.mjs",
+    "start:dev": "bun src/dev-server.tsx",
     "start": "node dist/server.js"
   },
   "dependencies": {
@@ -31,12 +32,14 @@
     "ws": "8.8.1"
   },
   "devDependencies": {
-    "parcel": "dev",
+    "@biomejs/biome": "1.9.4",
     "@parcel/config-default": "dev",
-    "@types/parcel-env": "0.0.6",
     "@types/node": "22.10.1",
+    "@types/parcel-env": "0.0.6",
     "@types/react": "19.0.0",
-    "@types/react-dom": "19.0.0"
+    "@types/react-dom": "19.0.0",
+    "parcel": "dev",
+    "rolldown": "^1.0.0-beta.1"
   },
   "@parcel/resolver-default": {
     "packageExports": true

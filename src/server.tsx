@@ -1,4 +1,3 @@
-import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 
 // Server dependencies.
@@ -162,17 +161,5 @@ async function handleHonoAction(
   }
 }
 
-console.log("Starting server");
 
-let server = serve({ fetch: honoApp.fetch, port: 3001 });
-console.log("Server listening on port 3001");
-
-// @TODO: hot reloading doesn't work yet
-// Restart the server when it changes.
-if (module.hot) {
-  module.hot.dispose(() => {
-    server.close();
-  });
-
-  module.hot.accept();
-}
+export default honoApp.fetch

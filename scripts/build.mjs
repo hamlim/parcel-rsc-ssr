@@ -1,8 +1,14 @@
 import { execSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { build } from "rolldown";
+
 execSync("bun parcel build");
 
 // After it's built - now we move files to the correct locations
+
+if (existsSync(".vercel/output")) {
+  execSync("rm -rf .vercel/output");
+}
 
 // make the necessary directories
 execSync("mkdir -p .vercel/output/static");
@@ -20,8 +26,21 @@ execSync("cp -r dist/* .vercel/output/static/");
 // make the necessary serverless directories
 execSync("mkdir -p .vercel/output/functions/serverless.func");
 
+let legacy = false;
+
 // move all files from dist/ to the serverless.func directory
-execSync("cp -r dist/* .vercel/output/functions/serverless.func/");
+if (legacy) {
+  execSync("cp -r dist/* .vercel/output/functions/serverless.func/");
+} else {
+  await build({
+    input: "dist/server.js",
+    platform: "node",
+
+    output: {
+      file: ".vercel/output/functions/serverless.func/server.js",
+    },
+  });
+}
 
 writeFileSync(
   ".vercel/output/functions/serverless.func/.vc-config.json",
