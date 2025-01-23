@@ -1,14 +1,12 @@
 {
   "name": "parcel-rsc-ssr",
   "server": "dist/server.js",
+  "source": "src/server.tsx",
   "targets": {
     "server": {
-      "source": "src/server.tsx",
       "context": "react-server",
-      "outputFormat": "commonjs",
       "includeNodeModules": {
         "hono": false,
-        "express": false,
         "@hono/node-server": false
       }
     }
@@ -17,18 +15,17 @@
     "watch": "parcel watch",
     "parcel:build": "parcel build",
     "build": "bun scripts/build.mjs",
-    "start:dev": "bun src/dev-server.tsx",
-    "start": "node dist/server.js"
+    "start:dev": "node ./dev-server.mjs",
+    "start": "node ./dev-server.mjs",
+    "parcel:start": "parcel"
   },
   "dependencies": {
+    "@parcel/rsc": "canary",
     "@hono/node-server": "1.13.7",
-    "@parcel/runtime-rsc": "dev",
     "@tailwindcss/postcss": "4.0.0-beta.8",
     "hono": "4.6.14",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "react-server-dom-parcel": "0.0.1",
-    "rsc-html-stream": "0.0.4",
+    "react": "0.0.0-experimental-9b62ee71-20250122",
+    "react-dom": "0.0.0-experimental-9b62ee71-20250122",
     "tailwindcss": "4.0.0-beta.8"
   },
   "devDependencies": {
@@ -38,8 +35,8 @@
     "@types/parcel-env": "0.0.6",
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0",
-    "parcel": "dev",
-    "rolldown": "^1.0.0-beta.1"
+    "parcel": "canary",
+    "rolldown": "1.0.0-beta.1"
   },
   "@parcel/resolver-default": {
     "packageExports": true

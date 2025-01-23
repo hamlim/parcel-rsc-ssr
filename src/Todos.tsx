@@ -3,7 +3,6 @@
 import "./client";
 // import "./Todos.css";
 import "./app.css";
-import { Resources } from "@parcel/runtime-rsc";
 import { Dialog } from "./Dialog";
 import { TodoCreate } from "./TodoCreate";
 import { TodoDetail } from "./TodoDetail";
@@ -14,7 +13,6 @@ export async function Todos({ id }: { id?: number }) {
     <html lang="en" style={{ colorScheme: "dark light" }}>
       <head>
         <title>Hello World!</title>
-        <Resources />
       </head>
       <body className="font-family-system-ui">
         <header className="flex items-center justify-between max-w-250px p-8 pr-40 box-border">
