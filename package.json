@@ -15,6 +15,7 @@
   },
   "scripts": {
     "watch": "parcel watch",
+    "parcel:build": "parcel build",
     "build": "bun scripts/build.mjs",
     "start:dev": "bun src/dev-server.tsx",
     "start": "node dist/server.js"
@@ -28,8 +29,7 @@
     "react-dom": "19.0.0",
     "react-server-dom-parcel": "0.0.1",
     "rsc-html-stream": "0.0.4",
-    "tailwindcss": "4.0.0-beta.8",
-    "ws": "8.8.1"
+    "tailwindcss": "4.0.0-beta.8"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
