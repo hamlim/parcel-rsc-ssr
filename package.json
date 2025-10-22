@@ -23,7 +23,7 @@
     "@parcel/rsc": "canary",
     "@hono/node-server": "1.13.7",
     "@tailwindcss/postcss": "4.0.0-beta.8",
-    "hono": "4.9.7",
+    "hono": "4.10.2",
     "react": "0.0.0-experimental-9b62ee71-20250122",
     "react-dom": "0.0.0-experimental-9b62ee71-20250122",
     "tailwindcss": "4.0.0-beta.8"
